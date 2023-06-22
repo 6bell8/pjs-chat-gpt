@@ -1,0 +1,18 @@
+p태그를 위아래 넓게 벌리고 싶을 때 
+
+display flex 때리고, column-direction > column
+> justify-content = space-between 하면 위아래로
+널찍하게 벌어짐
+
+favicon은 index 최상단에 있다. 
+
+
+input box에 포커스를 푸는 방법
+input:focus none
+
+// node js
+
+Bearer는 Authorzation 인증관련 매서드 
+
+node js 상에서는 fetch 내장 함수가 없기 때문에, 
+const fetch = require("node-fetch") 이런식으로 따로 불러온다
