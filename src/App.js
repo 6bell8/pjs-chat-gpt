@@ -14,7 +14,7 @@ const App = () => {
         message: "안녕하세요? 반갑습니다.",
       }),
       headers: {
-        "Content-TYPE": "application/json",
+        "Content-Type": "application/json",
       },
     };
     try {

@@ -16,3 +16,19 @@ Bearer는 Authorzation 인증관련 매서드
 
 node js 상에서는 fetch 내장 함수가 없기 때문에, 
 const fetch = require("node-fetch") 이런식으로 따로 불러온다
+
+header 매서드 확인 잘하기, 아까 content-type 오타나서 실행이 안된듯
+또, fetch는 node.js 에서 내장함수가 아니라서 npm 통해서 다운을 받아야 함
+
+그래서 npm install node-fetch 로 받았는데, 버그 발생 
+> 해결 방법 npm install node-fetch@2 로 받으니까 버그 종료
+
+결과적으로 
+type : "module" 이런식으로 설정해서 import 꼴값 떨 필요가 없었음
+
+39:11
+
+방향은 일단 fetch api 연동해서 한번 만들어보고 css 그대로 axios로도 만들어보기
+그리고 테마 다크모드로 변경할 수 있도록 대시보드 토대로 커스텀도 해보기
+
+plant-shop에서 chat-gpt api 연동을통해 상담원 연결도 가능

@@ -1,22 +1,23 @@
 const PORT = 8000;
 const express = require("express");
-// const fetch = require("node-fetch");
 const cors = require("cors");
 const app = express();
-// node js는 fetch require로 불러오는건데, 먼 importㅋㅋ
+const fetch = require("node-fetch");
+// node js는 fetch require로 불러오는
 
 app.use(express.json());
 app.use(cors());
 
-const API_KEY = "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";
+
 
 // post 양식을 제출할 때, completions page로 보내서 받기
 // 비동기 함수 때릴 떄, 파라미터 앞에 어싱크
 app.post("/completions", async (req, res) => {
   const options = {
-    methods: "POST",
+    method: "POST",
     headers: {
-      Authorization: `Bearer ${API_KEY}`,
+      // prettier-ignore
+      "Authorization": `Bearer ${API_KEY}`,
       "Content-Type": "application/json",
     },
     // json string으로 바꿔주는 것
