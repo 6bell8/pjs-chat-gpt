@@ -5,10 +5,11 @@ const app = express();
 const fetch = require("node-fetch");
 // node js는 fetch require로 불러오는
 
+// 이걸 잊지말라는데 뭘 잊지말라는건지 모르겠음
 app.use(express.json());
 app.use(cors());
 
-
+const REACT_APP_API_KEY = "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";
 
 // post 양식을 제출할 때, completions page로 보내서 받기
 // 비동기 함수 때릴 떄, 파라미터 앞에 어싱크
@@ -17,13 +18,14 @@ app.post("/completions", async (req, res) => {
     method: "POST",
     headers: {
       // prettier-ignore
-      "Authorization": `Bearer ${API_KEY}`,
+      // "Authorization": `Bearer ${process.env.REACT_APP_API_KEY}`,
+      "Authorization": `Bearer ${REACT_APP_API_KEY}`,
       "Content-Type": "application/json",
     },
-    // json string으로 바꿔주는 것
+    // json string으로 바꿔주는 것, 그리고 req.body는 node js 프레임워크에서 사용하는 본문 데이터를 요청하는 방법이다.
     body: JSON.stringify({
       model: "gpt-3.5-turbo",
-      messages: [{ role: "user", content: "how are you?" }],
+      messages: [{ role: "user", content: req.body.message }],
       max_tokens: 100,
     }),
   };

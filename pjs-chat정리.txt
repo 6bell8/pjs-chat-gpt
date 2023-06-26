@@ -21,12 +21,30 @@ header 매서드 확인 잘하기, 아까 content-type 오타나서 실행이 �
 또, fetch는 node.js 에서 내장함수가 아니라서 npm 통해서 다운을 받아야 함
 
 그래서 npm install node-fetch 로 받았는데, 버그 발생 
-> 해결 방법 npm install node-fetch@2 로 받으니까 버그 종료
+> 해결 방법 npm install node-fetch@2 로 받으니까 버그 해결완료
 
 결과적으로 
 type : "module" 이런식으로 설정해서 import 꼴값 떨 필요가 없었음
 
-39:11
+6.25 git에 그대로 올리니까 API_KEY가 노출돼서 삭제 함. .env에 process.env로 다시 세팅해서 올림. 
+
+
+
+<.env 서버 배포관련>
+node 따로 서버에 올려서 배포할 때, 내부 보안망에 
+.env 파일 세팅을 따로 올려줘야 됐음
+
+//state값이 "null"일 경우에 컴포넌트 내에서 오류가 생길 수 있음
+
+때문에 ex. value || "" 같은 논리연산자로 풀어주면 된다.
+
+
+req.body란?
+
+클라이언트에서 서버로 post 요청을 보내고, 그 본문에 json 형식의 데이터가 담겨있다고 가정해보면, 서버에서는 req.body를 사용하여,json 데이터로 클라이언트가 보낸 데이터를 접근을 요청 할 수 있고, 이로 인해 필요한 작업을 수행 할 수 있다.
+
+
+56:19
 
 방향은 일단 fetch api 연동해서 한번 만들어보고 css 그대로 axios로도 만들어보기
 그리고 테마 다크모드로 변경할 수 있도록 대시보드 토대로 커스텀도 해보기
