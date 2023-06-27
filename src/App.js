@@ -2,7 +2,7 @@
 
 import { BsPlusCircleFill } from "react-icons/bs";
 import { AiOutlineArrowRight } from "react-icons/ai";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import "./index.css";
 
 const App = () => {
@@ -11,6 +11,15 @@ const App = () => {
   const [previousChats, setPreviousChats] = useState([]);
   const [currentTitle, setCurrentTitle] = useState(null);
 
+  // 채팅 용 스크롤 제어
+  // dom을 직접 지정하고
+  const scrollRef = useRef();
+  // useEffect변화를 통해서, 현재 스크롤을 스크롤 길이값과 같게하여 자동으로 내리기
+  useEffect(() => {
+    scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+  });
+
+  // 새로운 채팅 생성
   const creatNewChat = () => {
     setMessage(null);
     setValue("");
@@ -43,8 +52,14 @@ const App = () => {
     }
   };
 
+  const handleOnKeyPress = (e) => {
+    if (e.key === "Enter") {
+      getMessages(); // Enter 입력이 되면 클릭 이벤트 실행
+    }
+  };
+
+  // 이전 채팅 기록 state 최신화
   useEffect(() => {
-    console.log(currentTitle, value, message);
     // 하기 세가지 내용과 같지 않으면 setcurrentTitle에 값을 넣어라
     if (!currentTitle && value && message) {
       setCurrentTitle(value);
@@ -64,33 +79,54 @@ const App = () => {
     }
   }, [message, currentTitle]);
 
-  console.log(previousChats);
-
+  // 이전 채팅 타이틀과 현재 채팅 타이틀이 같을 경우 filter해서 새로운 배열 리턴
   const currentChat = previousChats.filter(
     (previousChat) => previousChat.title === currentTitle
   );
 
+  // 중복 방지 Array.from 이터러블 배열 생성(앝은 복사)
+  const uniqueTitles = Array.from(
+    new Set(previousChats.map((previousChats) => previousChats.title))
+  );
+
+  // 클릭 시 이전 채팅으로 이동 // click 시  setCurrentTitle에 uniqueTitle 인자값을 넣어줌 ㄷㄷ
+  const handleClick = (uniqueTitle) => {
+    setCurrentTitle(uniqueTitle);
+    setMessage(null);
+    setValue("");
+  };
+
   return (
     <div className="app">
       <section className="side-bar">
-        <button onClick={creatNewChat}>
+        <button onClick={creatNewChat} className="newChat-btn">
           <BsPlusCircleFill className="plus-icon" />
           새로운 채팅
         </button>
         <ul className="history">
-          <li>asd</li>
+          {/* handleClick안에 uniqueTitle을 넣어줘야 인자값이 들어감, 그리고 인자 값을 넣어줬으니 화살표 함수를 떄려줘야됨 */}
+          {uniqueTitles?.map((uniqueTitle, i) => (
+            <li key={i} onClick={() => handleClick(uniqueTitle)}>
+              {uniqueTitle}
+            </li>
+          ))}
         </ul>
         <nav>
-          <p>Made By Jinsung</p>
+          <p className="madeby">Made By Jinsung</p>
         </nav>
       </section>
       <section className="main">
         {!currentTitle && <h1>pjs-chatGPT</h1>}
-        <ul className="feed">
+        <ul className="feed" ref={scrollRef}>
           {/* currentChat에서 매핑 떄려서 순서대로 나열  */}
-          {currentChat.map((chatMessage, index) => {
-            <li key={index}></li>;
-          })}
+          {/* undefined가 뜰 수 있으니, 옵셔널체이닝 */}
+          {currentChat?.map((chatMessage, i) => (
+            <li key={i}>
+              <p className="role">{chatMessage.role}</p>
+              <p>{chatMessage.content}</p>
+              <p></p>
+            </li>
+          ))}
         </ul>
         <div className="bottom-section">
           <div className="input-container">
@@ -99,6 +135,7 @@ const App = () => {
               onChange={(e) => {
                 setValue(e.target.value);
               }}
+              onKeyDown={handleOnKeyPress}
             />
             <div id="submit" onClick={getMessages}>
               <AiOutlineArrowRight />
