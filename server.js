@@ -1,4 +1,4 @@
-const PORT = 8080;
+const PORT = 8000;
 const express = require("express");
 const cors = require("cors");
 const app = express();
@@ -9,6 +9,7 @@ const fetch = require("node-fetch");
 // 이걸 잊지말라는데 뭘 잊지말라는건지 모르겠음
 app.use(express.json());
 app.use(cors());
+
 require("dotenv").config();
 
 // post 양식을 제출할 때, completions page로 보내서 받기
