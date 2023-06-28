@@ -29,7 +29,6 @@ type : "module" 이런식으로 설정해서 import 꼴값 떨 필요가 없었�
 6.25 git에 그대로 올리니까 API_KEY가 노출돼서 삭제 함. .env에 process.env로 다시 세팅해서 올림. 
 
 
-REACT_APP_API_KEY=다시간도아
 
 
 <.env 서버 배포관련>
