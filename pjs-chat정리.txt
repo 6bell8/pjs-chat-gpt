@@ -28,8 +28,7 @@ type : "module" 이런식으로 설정해서 import 꼴값 떨 필요가 없었�
 
 6.25 git에 그대로 올리니까 API_KEY가 노출돼서 삭제 함. .env에 process.env로 다시 세팅해서 올림. 
 
-
-
+.env 파일이 이미 git에 올라가있다면, 본인 파일에서 env를 지워서 추적을 피하고, gitignore에 재업로드
 
 <.env 서버 배포관련>
 node 따로 서버에 올려서 배포할 때, 내부 보안망에 
