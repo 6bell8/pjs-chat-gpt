@@ -4,11 +4,16 @@ display flex 때리고, column-direction > column
 > justify-content = space-between 하면 위아래로
 널찍하게 벌어짐
 
+
+
 favicon은 index 최상단에 있다. 
 
 
 input box에 포커스를 푸는 방법
 input:focus none
+
+
+
 
 // node js
 
@@ -17,18 +22,28 @@ Bearer는 Authorzation 인증관련 매서드
 node js 상에서는 fetch 내장 함수가 없기 때문에, 
 const fetch = require("node-fetch") 이런식으로 따로 불러온다
 
+
+
 header 매서드 확인 잘하기, 아까 content-type 오타나서 실행이 안된듯
 또, fetch는 node.js 에서 내장함수가 아니라서 npm 통해서 다운을 받아야 함
 
+
+
 그래서 npm install node-fetch 로 받았는데, 버그 발생 
 > 해결 방법 npm install node-fetch@2 로 받으니까 버그 해결완료
+
+
+
 
 결과적으로 
 type : "module" 이런식으로 설정해서 import 꼴값 떨 필요가 없었음
 
 6.25 git에 그대로 올리니까 API_KEY가 노출돼서 삭제 함. .env에 process.env로 다시 세팅해서 올림. 
 
-.env 파일이 이미 git에 올라가있다면, 본인 파일에서 env를 지워서 추적을 피하고, gitignore에 재업로드
+.env 파일이 이미 git에 올라가있다면, 본인 파일에서 env를 지워서 추적을 피하고, gitignore에 적어서, 재업로드
+
+
+
 
 <.env 서버 배포관련>
 node 따로 서버에 올려서 배포할 때, 내부 보안망에 
@@ -39,18 +54,60 @@ node 따로 서버에 올려서 배포할 때, 내부 보안망에
 때문에 ex. value || "" 같은 논리연산자로 풀어주면 된다.
 
 
+
+
 req.body란?
 
 클라이언트에서 서버로 post 요청을 보내고, 그 본문에 json 형식의 데이터가 담겨있다고 가정해보면, 서버에서는 req.body를 사용하여,json 데이터로 클라이언트가 보낸 데이터를 접근을 요청 할 수 있고, 이로 인해 필요한 작업을 수행 할 수 있다.
 
 
-아 .env에서 올라가서 api 키 노출돼서 자동 삭제 됨,, 다시 받아오기
+
+
+fly.io에서 port 연결이 계속 오류,, 그래서 8080으로 바꿨는데, 여기서도 오류터지면 stackoverflow 참고해서 바꾸기
+
+
 
 
 서버에서 dotenv 안깔면 실행이 안되기 때문에, 반드시 깔고, require('dotenv').config 해놓기
 배포 할 때 같이 build해서 fly.io로 배포,,
+- 최종적으로 build해서 동시에 배포가 불가했음, 
 
-build 배포 정 안되면, 서버 클라이언트 나눠서 배포해보기
+그래서 node js 부분은 fly.io로 배포함
+
+
+
+
+서버 fly.toml에서 포트 설정이 3000으로 되어있어서, 클라이언트 포트랑 겹쳐지는 오류가 발생!
+
+때문에 배포 시 internal_port를 8080으로 바꿔주었고(fly에서도 이 부분을 지향함)
+
+해당 문제 해결,
+
+
+
+
+또 이후에 post, url을 localhost가 아닌 서버로 바꾸어주었는데, 계속 에러가 나면서 문제가 발생! <이런 경우 syntaxError라고 뜸>
+
+해당 문제는 서버 측에서 post 요청을 /completions으로 보내야 response을 해주는데 /에 쳐 보내고 있으니까 말귀를 못알아먹음
+
+따라서 /completions으로 보내서 문제해결
+
+
+
+// client 부분 추가
+
+새로운 채팅 파트에서 끝나는 시간을 구해서 li에 적용, space-between, 이후 코드 리딩해보기
+
+현재 시간은 적용을 하겠는데, 끝나는 시간을 적용을 못하겠음,,
+끝나는 시간을 알아내려면, set 배열에 끝나는 시간을 넣어주면서 최신화 시켜주어야 될 듯, 근데 최신화 할 때마다 바뀜, 그러면 현재 타이틀에다가 시간만 최신화를 시켜주어야 될 거 같은데,,
+
+일단 채팅창에 현재 시간 달아서 리턴했고, 해당 시간 토대로 map 때려주면 될 거 같음
+
+
+6/28
+분 구하는 중인데, 중복값도, 리턴 될 수 있도록, 지금 설계하는 중 내일은 분 중복도 채팅창 시간에 리턴되도록 설계 ㄱㄱ
+
+
 
 방향은 일단 fetch api 연동해서 한번 만들어보고 css 그대로 axios로도 만들어보기
 그리고 테마 다크모드로 변경할 수 있도록 대시보드 토대로 커스텀도 해보기

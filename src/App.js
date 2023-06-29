@@ -8,8 +8,16 @@ import "./index.css";
 const App = () => {
   const [value, setValue] = useState(null);
   const [message, setMessage] = useState(null);
+  const [time, setTime] = useState([]);
   const [previousChats, setPreviousChats] = useState([]);
   const [currentTitle, setCurrentTitle] = useState(null);
+
+  //채팅 시간 기록
+  const date = new Date();
+  const timenow = {
+    hours: String(date.getHours()),
+    mins: String(date.getMinutes()),
+  };
 
   // 채팅 용 스크롤 제어
   // dom을 직접 지정하고
@@ -41,7 +49,8 @@ const App = () => {
     try {
       // 서버에서 했던 것 처럼 서버에서 전송한 데이터를 json 형태로 가공하는 작업
       const response = await fetch(
-        "http://localhost:8000/completions",
+        // "http://localhost:8000/completions",
+        "https://pjs-chat-server.fly.dev/completions",
         options
       );
       const data = await response.json();
@@ -73,6 +82,8 @@ const App = () => {
           title: currentTitle,
           role: "사용자",
           content: value,
+          timeHour: timenow.hours,
+          timeMin: timenow.mins,
         },
         { title: currentTitle, role: message.role, content: message.content },
       ]);
@@ -85,9 +96,21 @@ const App = () => {
   );
 
   // 중복 방지 Array.from 이터러블 배열 생성(앝은 복사)
-  const uniqueTitles = Array.from(
-    new Set(previousChats.map((previousChats) => previousChats.title))
-  );
+  const uniqueTitles = {
+    array: Array.from(
+      new Set(previousChats.map((previousChats) => previousChats.title))
+    ),
+    timeHours: new Set(
+      previousChats.map((previousChats) => previousChats.timeHour)
+    ),
+    timeMins: Array.from(
+      new Set(previousChats.map((previousChats) => previousChats.timeMin))
+    ),
+  };
+
+  const maxMin = Math.max(uniqueTitles?.timeMins);
+
+  console.log(maxMin);
 
   // 클릭 시 이전 채팅으로 이동 // click 시  setCurrentTitle에 uniqueTitle 인자값을 넣어줌 ㄷㄷ
   const handleClick = (uniqueTitle) => {
@@ -105,9 +128,13 @@ const App = () => {
         </button>
         <ul className="history">
           {/* handleClick안에 uniqueTitle을 넣어줘야 인자값이 들어감, 그리고 인자 값을 넣어줬으니 화살표 함수를 떄려줘야됨 */}
-          {uniqueTitles?.map((uniqueTitle, i) => (
+          {uniqueTitles.array?.map((uniqueTitle, i) => (
             <li key={i} onClick={() => handleClick(uniqueTitle)}>
               {uniqueTitle}
+              <span>
+                {uniqueTitles?.timeHours}:{uniqueTitles?.timeMins}
+                {/* {uniqueTitles?.timeMins[i]} */}
+              </span>
             </li>
           ))}
         </ul>
@@ -124,7 +151,6 @@ const App = () => {
             <li key={i}>
               <p className="role">{chatMessage.role}</p>
               <p>{chatMessage.content}</p>
-              <p></p>
             </li>
           ))}
         </ul>
