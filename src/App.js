@@ -4,20 +4,17 @@ import { BsPlusCircleFill } from "react-icons/bs";
 import { AiOutlineArrowRight } from "react-icons/ai";
 import { useState, useEffect, useRef } from "react";
 import "./index.css";
+import moment from "moment";
 
 const App = () => {
   const [value, setValue] = useState(null);
   const [message, setMessage] = useState(null);
-  const [time, setTime] = useState([]);
+  const [timeNow, setTimeNow] = useState([]);
   const [previousChats, setPreviousChats] = useState([]);
   const [currentTitle, setCurrentTitle] = useState(null);
 
   //채팅 시간 기록
-  const date = new Date();
-  const timenow = {
-    hours: String(date.getHours()),
-    mins: String(date.getMinutes()),
-  };
+  const nowTime = moment().format("HH:mm");
 
   // 채팅 용 스크롤 제어
   // dom을 직접 지정하고
@@ -32,6 +29,7 @@ const App = () => {
     setMessage(null);
     setValue("");
     setCurrentTitle(null);
+    setTimeNow(timeNow);
   };
 
   // backend에서 send한 data를 다시 보내주는 작업
@@ -82,10 +80,14 @@ const App = () => {
           title: currentTitle,
           role: "사용자",
           content: value,
-          timeHour: timenow.hours,
-          timeMin: timenow.mins,
+          time: nowTime,
         },
-        { title: currentTitle, role: message.role, content: message.content },
+        {
+          title: currentTitle,
+          role: message.role,
+          content: message.content,
+          time: nowTime,
+        },
       ]);
     }
   }, [message, currentTitle]);
@@ -100,23 +102,14 @@ const App = () => {
     array: Array.from(
       new Set(previousChats.map((previousChats) => previousChats.title))
     ),
-    timeHours: new Set(
-      previousChats.map((previousChats) => previousChats.timeHour)
-    ),
-    timeMins: Array.from(
-      new Set(previousChats.map((previousChats) => previousChats.timeMin))
-    ),
   };
-
-  const maxMin = Math.max(uniqueTitles?.timeMins);
-
-  console.log(maxMin);
 
   // 클릭 시 이전 채팅으로 이동 // click 시  setCurrentTitle에 uniqueTitle 인자값을 넣어줌 ㄷㄷ
   const handleClick = (uniqueTitle) => {
     setCurrentTitle(uniqueTitle);
     setMessage(null);
     setValue("");
+    setTimeNow(uniqueTitle);
   };
 
   return (
@@ -131,10 +124,6 @@ const App = () => {
           {uniqueTitles.array?.map((uniqueTitle, i) => (
             <li key={i} onClick={() => handleClick(uniqueTitle)}>
               {uniqueTitle}
-              <span>
-                {uniqueTitles?.timeHours}:{uniqueTitles?.timeMins}
-                {/* {uniqueTitles?.timeMins[i]} */}
-              </span>
             </li>
           ))}
         </ul>
