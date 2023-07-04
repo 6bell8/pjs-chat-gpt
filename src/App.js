@@ -109,7 +109,6 @@ const App = () => {
     setCurrentTitle(uniqueTitle);
     setMessage(null);
     setValue("");
-    setTimeNow(uniqueTitle);
   };
 
   return (

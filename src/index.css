@@ -19,7 +19,7 @@ body {
 .history li {
   list-style-type: none;
   padding: 15px 0;
-  font-weight: 700;
+  font-weight: 900;
   cursor: pointer;
   border-bottom: 0.5px solid #ccc;
 }
